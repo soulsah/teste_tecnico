@@ -13,7 +13,7 @@ class TransactionController {
     }
   }
 
-  async getAllTransactions(res: Response){
+  async getAllTransactions(req: Request, res: Response){
     try{
       const transaction = await transactionModel.getAllTransactions();
       res.json(transaction);

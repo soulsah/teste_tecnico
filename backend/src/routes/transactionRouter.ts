@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import transactionController from '../controllers/transactionController';
 
-const router = Router();
+const transactionRouter = Router();
 
-router.get('/transactions', transactionController.getAllTransactions);
-router.get('/transactions/:id', transactionController.getTransaction);
-router.post('/transactions', transactionController.addTransaction);
-router.put('/transactions/:id', transactionController.updateTransaction);
-router.delete('/transactions/:id', transactionController.deleteTransaction);
+transactionRouter.get('/', transactionController.getAllTransactions);
+transactionRouter.get('/:id', transactionController.getTransaction);
+transactionRouter.post('/', transactionController.addTransaction);
+transactionRouter.put('/:id', transactionController.updateTransaction);
+transactionRouter.delete('/:id', transactionController.deleteTransaction);
 
-export default router;
+export default transactionRouter;
