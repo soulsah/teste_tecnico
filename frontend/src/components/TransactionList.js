@@ -1,23 +1,32 @@
-// src/components/TransactionList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
+  const [error, setError] = useState(null);
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await axios.get('http://localhost:2077/');
+      setTransactions(response.data);
+      console.log(response.data);
+    } catch (error) {
+      setError(error.message || 'An error occurred while fetching transactions.');
+    }
+  };
 
   useEffect(() => {
     fetchTransactions();
   }, []);
 
-  const fetchTransactions = async () => {
-    const response = await axios.get('http://localhost:3001/transactions'); // Atualize com a URL do seu backend
-    setTransactions(response.data);
-  };
-
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:3001/transactions/${id}`); // Atualize com a URL do seu backend
-    fetchTransactions();
+    try {
+      await axios.delete(`http://localhost:2077/${id}`);
+      fetchTransactions();
+    } catch (error) {
+      setError(error.message || 'An error occurred while deleting the transaction.');
+    }
   };
 
   return (
@@ -26,6 +35,7 @@ const TransactionList = () => {
       <Link to="/add">
         <button>Add Transaction</button>
       </Link>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <table>
         <thead>
           <tr>
@@ -44,7 +54,7 @@ const TransactionList = () => {
               <td>{transaction.id}</td>
               <td>{transaction.client}</td>
               <td>{transaction.description}</td>
-              <td>{transaction.typeTransaction}</td>
+              <td>{transaction.transactionType}</td>
               <td>{transaction.value}</td>
               <td>{new Date(transaction.date).toLocaleString()}</td>
               <td>
