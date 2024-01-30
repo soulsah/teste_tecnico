@@ -44,7 +44,13 @@ export function App() {
             </TableRow>
           </TableHeader>
           <TableBody>
-              {transactions?.map((transaction) => {
+              {transactions?.map((transaction: any) => {
+                const transactionDate = new Date(transaction.date);
+                const day = String(transactionDate.getDate()).padStart(2, '0');
+                const month = String(transactionDate.getMonth() + 1).padStart(2, '0');
+                const year = transactionDate.getFullYear();
+                const formattedDate = `${day}/${month}/${year}`;
+
                 return (
                   <TableRow key={transaction.id}>
                     <TableCell>{transaction.id}</TableCell>
@@ -52,7 +58,7 @@ export function App() {
                     <TableCell>{transaction.description}</TableCell>
                     <TableCell>{transaction.transactionType}</TableCell>
                     <TableCell>{transaction.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'})}</TableCell>
-                    <TableCell>{transaction.date}</TableCell>
+                    <TableCell>{formattedDate}</TableCell>
                   </TableRow>
                 )
               })}
