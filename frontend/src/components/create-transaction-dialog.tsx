@@ -5,6 +5,7 @@ import { Button } from "./ui/button"
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { addTransaction } from "@/data/transactions"
 
 const createTransactionSchema = z.object({
   client: z.string(),
@@ -13,15 +14,21 @@ const createTransactionSchema = z.object({
   value: z.coerce.number()
 })
 
-type CreateTransactionSchema = z.infer<typeof createTransactionSchema>
+export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>
 
 export function CreateTransactionDialog() {
-  const { register, handleSubmit } = useForm<CreateTransactionSchema>({
+  const { register, handleSubmit, reset } = useForm<CreateTransactionSchema>({
     resolver: zodResolver(createTransactionSchema)
   })
 
-  function handleCreateTransaction(data: CreateTransactionSchema){
-    console.log(data)
+  async function handleCreateTransaction(data: CreateTransactionSchema){
+    try{
+      await addTransaction(data);
+      alert("Transaction added successfully");
+      reset();
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   return (
