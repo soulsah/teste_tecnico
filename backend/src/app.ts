@@ -9,9 +9,10 @@ dotenv.config();
 const port = process.env.PORT || 9999;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(transactionRouter);
-app.use(cors());
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
